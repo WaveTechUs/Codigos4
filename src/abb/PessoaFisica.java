@@ -7,15 +7,16 @@ import modelo.Cliente;
 public class PessoaFisica {
 	No raiz;
 
-	PessoaFisica() {
-		raiz = null;
-	}
-
-	class No {
+	public class No {
 		No direita = null;
 		No esquerda = null;
 		int altura = 1;
 		Cliente cliente;
+	}
+
+	public No init() {
+		raiz = null;
+		return raiz;
 	}
 
 	private int obterAltura(No raiz) {
@@ -80,7 +81,7 @@ public class PessoaFisica {
 	}
 
 	private Cliente obterSaldoMinimo(No raiz) {
-		while(raiz.esquerda != null) {
+		while (raiz.esquerda != null) {
 			raiz = raiz.esquerda;
 		}
 		return raiz.cliente;
@@ -99,7 +100,7 @@ public class PessoaFisica {
 			raiz.esquerda.altura = obterAltura(raiz.esquerda);
 		}
 
-		if (clienteNovo.getSaldoAplicacao() < raiz.cliente.getSaldoAplicacao()) {
+		if (clienteNovo.getSaldoAplicacao() > raiz.cliente.getSaldoAplicacao()) {
 			raiz.direita = inserir(raiz.direita, clienteNovo);
 			raiz.direita.altura = obterAltura(raiz.direita);
 		}
@@ -131,7 +132,7 @@ public class PessoaFisica {
 				raiz.direita = apagar(raiz.direita, clienteSaldoMinimo);
 			}
 		}
-		
+
 		atualizarAltura(raiz);
 		raiz = balancear(raiz);
 		atualizarAltura(raiz);
@@ -140,19 +141,33 @@ public class PessoaFisica {
 	}
 
 	public void esvaziar(No raiz) {
+		// TODO: Possívelmente vai ser apagado
 		esvaziar(raiz.esquerda);
 		esvaziar(raiz.direita);
 		raiz = null;
 	}
 
 	public Cliente procurar(No raiz, String cpf) {
-		Cliente cliente = new Cliente();
+	    return procurarAjuda(raiz, cpf);
+	}
 
-		return cliente;
+	private Cliente procurarAjuda(No raiz, String cpf) {
+	    if (raiz == null)
+	        return null;
+
+	    if (raiz.cliente.getCpfcnpj().equals(cpf))
+	        return raiz.cliente;
+
+	    Cliente encontradoNaEsquerda = procurarAjuda(raiz.esquerda, cpf);
+	    if (encontradoNaEsquerda != null) {
+	        return encontradoNaEsquerda;
+	    }
+
+	    return procurarAjuda(raiz.direita, cpf);
 	}
 
 	public Cliente atualizarSaldo(No raiz, String numeroConta) {
-		Cliente cliente = new Cliente();
+		Cliente cliente = null;
 
 		return cliente;
 	}

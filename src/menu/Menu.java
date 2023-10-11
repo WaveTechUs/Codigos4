@@ -2,6 +2,10 @@ package menu;
 
 import java.util.Scanner;
 
+import abb.PessoaFisica;
+import abb.PessoaFisica.No;
+import modelo.Cliente;
+
 /*
  * Erik Giuseppe Kato Bandeira 92988
  * João Tancredi Dela Rocca 93527
@@ -13,6 +17,8 @@ public class Menu {
 
 	public static void main(String[] args) {
 		Scanner le = new Scanner(System.in);
+		PessoaFisica arvorePF = new PessoaFisica();
+		No raizPF = arvorePF.init();
 		/*
 		 * Cria a uma árvore de busca binária para cada tipo de conta (pessoa física ou
 		 * jurídica)
@@ -53,6 +59,12 @@ public class Menu {
 				} while (op == -1);
 				System.out.print("Informe saldo em aplicações R$: ");
 				saldo = le.nextDouble();
+				if (op == 1) {
+					Cliente pf = new Cliente(nome, cpfCnpj, numeroConta, tipoConta, saldo);
+					raizPF = arvorePF.inserir(raizPF, pf);
+				} else if (op == 2) {
+					//TODO:PJ
+				}
 				/*
 				 * Intancia um objeto da classe Cliente e insere na ABB correspondente a tipo de
 				 * conta

@@ -3,9 +3,18 @@ package modelo;
 public class Cliente {
 	String nomeString;
 	String cpfcnpj;
-	String numeroConta;
+	int numeroConta;
 	String tipoConta;
 	double saldoAplicacao;
+
+	public Cliente(String nomeString, String cpfcnpj, int numeroConta, String tipoConta, double saldoAplicacao) {
+		super();
+		this.nomeString = nomeString;
+		this.cpfcnpj = cpfcnpj;
+		this.numeroConta = numeroConta;
+		this.tipoConta = tipoConta;
+		this.saldoAplicacao = saldoAplicacao;
+	}
 
 	@Override
 	public String toString() {
@@ -19,7 +28,7 @@ public class Cliente {
 	public String getCpfcnpj() {
 		return cpfcnpj;
 	}
-	public String getNumeroConta() {
+	public int getNumeroConta() {
 		return numeroConta;
 	}
 	public String getTipoConta() {
@@ -34,7 +43,7 @@ public class Cliente {
 	public void setCpfcnpj(String cpfcnpj) {
 		this.cpfcnpj = cpfcnpj;
 	}
-	public void setNumeroConta(String numeroConta) {
+	public void setNumeroConta(int numeroConta) {
 		this.numeroConta = numeroConta;
 	}
 	public void setTipoConta(String tipoConta) {
