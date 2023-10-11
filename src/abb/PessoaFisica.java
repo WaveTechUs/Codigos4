@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import modelo.Cliente;
 
 public class PessoaFisica {
-	public static No raiz;
+	No raiz;
 
 	PessoaFisica() {
 		raiz = null;
@@ -23,13 +23,13 @@ public class PessoaFisica {
 			return 0;
 		return Math.max(obterAltura(raiz.esquerda), obterAltura(raiz.direita)) + 1;
 	}
-	
+
 	private int fatorBalaceador(No raiz) {
 		int direita = obterAltura(raiz.direita);
 		int esquerda = obterAltura(raiz.esquerda);
 		return esquerda - direita;
 	}
-	
+
 	private No rotacaoEsquerda(No raiz) {
 		No direita = raiz.direita;
 		No centro = direita.esquerda;
@@ -49,33 +49,41 @@ public class PessoaFisica {
 
 		return esquerda;
 	}
-	
+
 	private No balancear(No raiz) {
 		int fb = fatorBalaceador(raiz);
-		
-		if(fb > 1) {
-			if(fatorBalaceador(raiz.esquerda) < 0)
+
+		if (fb > 1) {
+			if (fatorBalaceador(raiz.esquerda) < 0)
 				raiz.esquerda = rotacaoEsquerda(raiz.esquerda);
 
 			raiz = rotacaoDireita(raiz);
 		}
-		
-		if(fb < -1) {
-			if(fatorBalaceador(raiz.direita) > 1)
+
+		if (fb < -1) {
+			if (fatorBalaceador(raiz.direita) > 1)
 				raiz.direita = rotacaoDireita(raiz.direita);
-			
+
 			raiz = rotacaoEsquerda(raiz);
 		}
 
 		return raiz;
 	}
-	
+
 	private void atualizarAltura(No raiz) {
-		if(raiz == null) return;
-		
+		if (raiz == null)
+			return;
+
 		atualizarAltura(raiz.esquerda);
 		atualizarAltura(raiz.direita);
 		raiz.altura = obterAltura(raiz);
+	}
+
+	private Cliente obterSaldoMinimo(No raiz) {
+		while(raiz.esquerda != null) {
+			raiz = raiz.esquerda;
+		}
+		return raiz.cliente;
 	}
 
 	public No inserir(No raiz, Cliente clienteNovo) {
@@ -95,19 +103,46 @@ public class PessoaFisica {
 			raiz.direita = inserir(raiz.direita, clienteNovo);
 			raiz.direita.altura = obterAltura(raiz.direita);
 		}
-		
+
 		raiz = balancear(raiz);
 		atualizarAltura(raiz);
 
 		return raiz;
 	}
 
-	public void apagar(No raiz, Cliente clienteApagar) {
+	public No apagar(No raiz, Cliente clienteApagar) {
+		if (raiz == null)
+			return raiz;
+		else if (clienteApagar.getSaldoAplicacao() < raiz.cliente.getSaldoAplicacao())
+			raiz.esquerda = apagar(raiz.esquerda, clienteApagar);
+		else if (clienteApagar.getSaldoAplicacao() > raiz.cliente.getSaldoAplicacao())
+			raiz.direita = apagar(raiz.direita, clienteApagar);
+		else {
+			if (raiz.esquerda == null && raiz.direita == null) {
+				raiz = null;
+				return raiz;
+			} else if (raiz.esquerda == null) {
+				raiz = raiz.direita;
+			} else if (raiz.direita == null) {
+				raiz = raiz.esquerda;
+			} else {
+				Cliente clienteSaldoMinimo = obterSaldoMinimo(raiz.direita);
+				raiz.cliente = clienteSaldoMinimo;
+				raiz.direita = apagar(raiz.direita, clienteSaldoMinimo);
+			}
+		}
 		
+		atualizarAltura(raiz);
+		raiz = balancear(raiz);
+		atualizarAltura(raiz);
+
+		return raiz;
 	}
 
 	public void esvaziar(No raiz) {
-
+		esvaziar(raiz.esquerda);
+		esvaziar(raiz.direita);
+		raiz = null;
 	}
 
 	public Cliente procurar(No raiz, String cpf) {
