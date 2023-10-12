@@ -140,51 +140,100 @@ public class PessoaFisica {
 		return raiz;
 	}
 
-	public void esvaziar(No raiz) {
-		// TODO: Possívelmente vai ser apagado
-		esvaziar(raiz.esquerda);
-		esvaziar(raiz.direita);
+	public ArrayList<Cliente> esvaziar(No raiz) {
+		ArrayList<Cliente> lista = new ArrayList<Cliente>();
+		esvaziarHelper(raiz, lista);
+		return lista;
+	}
+
+	private void esvaziarHelper(No raiz,ArrayList<Cliente> lista) {
+		if (raiz == null)
+			return;
+
+		esvaziarHelper(raiz.esquerda, lista);
+		esvaziarHelper(raiz.direita, lista);
+		lista.add(raiz.cliente);
 		raiz = null;
 	}
 
 	public Cliente procurar(No raiz, String cpf) {
-	    return procurarAjuda(raiz, cpf);
+		return procurarAjuda(raiz, cpf);
 	}
 
 	private Cliente procurarAjuda(No raiz, String cpf) {
-	    if (raiz == null)
-	        return null;
+		if (raiz == null)
+			return null;
 
-	    if (raiz.cliente.getCpfcnpj().equals(cpf))
-	        return raiz.cliente;
+		if (raiz.cliente.getCpfcnpj().equals(cpf))
+			return raiz.cliente;
 
-	    Cliente encontradoNaEsquerda = procurarAjuda(raiz.esquerda, cpf);
-	    if (encontradoNaEsquerda != null) {
-	        return encontradoNaEsquerda;
-	    }
+		Cliente encontradoNaEsquerda = procurarAjuda(raiz.esquerda, cpf);
+		if (encontradoNaEsquerda != null) {
+			return encontradoNaEsquerda;
+		}
 
-	    return procurarAjuda(raiz.direita, cpf);
+		return procurarAjuda(raiz.direita, cpf);
 	}
 
-	public Cliente atualizarSaldo(No raiz, String numeroConta) {
-		Cliente cliente = null;
+	public Cliente atualizarSaldo(No raiz, double numeroConta, double saldoNovo) {
+		return atualizarSaldoAjuda(raiz, numeroConta, saldoNovo);
+	}
 
-		return cliente;
+	private Cliente atualizarSaldoAjuda(No raiz, double numeroConta, double saldoNovo) {
+		if (raiz == null)
+			return null;
+
+		if (raiz.cliente.getNumeroConta() == numeroConta) {
+			raiz.cliente.setSaldoAplicacao(saldoNovo);
+			return raiz.cliente;
+		}
+
+		Cliente encontradoNaEsquerda = atualizarSaldoAjuda(raiz.esquerda, numeroConta, saldoNovo);
+		if (encontradoNaEsquerda != null) {
+			return encontradoNaEsquerda;
+		}
+
+		return atualizarSaldoAjuda(raiz.direita, numeroConta, saldoNovo);
 	}
 
 	public int quantidadeExistente(No raiz) {
+		if (raiz == null)
+			return 0;
+		if (raiz.esquerda == null && raiz.direita == null)
+			return 1;
 
-		return 0;
+		int totalEsquerda = quantidadeExistente(raiz.esquerda);
+		int totalDireita = quantidadeExistente(raiz.direita);
+		return totalEsquerda + totalDireita;
 	}
 
 	public int quantidadeExistenteSaldo(No raiz, double saldoMinimo) {
+		if (raiz == null)
+			return 0;
 
-		return 0;
+		if (raiz.esquerda == null && raiz.direita == null)
+			if (raiz.esquerda.cliente.getSaldoAplicacao() >= saldoMinimo
+					&& raiz.direita.cliente.getSaldoAplicacao() >= saldoMinimo)
+				return 1;
+
+		int totalEsquerda = quantidadeExistente(raiz.esquerda);
+		int totalDireita = quantidadeExistente(raiz.direita);
+		return totalEsquerda + totalDireita;
 	}
 
 	public ArrayList<Cliente> gerarLista(No raiz, double saldoMinimo) {
 		ArrayList<Cliente> lista = new ArrayList<Cliente>();
-
+		gerarListaHelper(raiz, saldoMinimo, lista);
 		return lista;
+	}
+
+	private void gerarListaHelper(No raiz, double saldoMinimo, ArrayList<Cliente> lista) {
+		if (raiz == null)
+			return;
+
+		gerarListaHelper(raiz.esquerda, saldoMinimo, lista);
+		if (raiz.cliente.getSaldoAplicacao() >= saldoMinimo)
+			lista.add(raiz.cliente);
+		gerarListaHelper(raiz.direita, saldoMinimo, lista);
 	}
 }
