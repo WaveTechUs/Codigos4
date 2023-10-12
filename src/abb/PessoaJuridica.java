@@ -1,5 +1,4 @@
 package abb;
 
-public class PessoaJuridica {
-
+public class PessoaJuridica extends PessaABB{
 }
