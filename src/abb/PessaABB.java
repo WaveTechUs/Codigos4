@@ -2,6 +2,8 @@ package abb;
 
 import java.util.ArrayList;
 
+import javax.swing.plaf.SliderUI;
+
 import modelo.Cliente;
 
 public class PessaABB {
@@ -146,7 +148,7 @@ public class PessaABB {
 		return lista;
 	}
 
-	private void esvaziarHelper(No raiz,ArrayList<Cliente> lista) {
+	private void esvaziarHelper(No raiz, ArrayList<Cliente> lista) {
 		if (raiz == null)
 			return;
 
@@ -204,21 +206,20 @@ public class PessaABB {
 
 		int totalEsquerda = quantidadeExistente(raiz.esquerda);
 		int totalDireita = quantidadeExistente(raiz.direita);
-		return totalEsquerda + totalDireita;
+		return 1 + totalEsquerda + totalDireita;
 	}
 
 	public int quantidadeExistenteSaldo(No raiz, double saldoMinimo) {
 		if (raiz == null)
 			return 0;
+		int qtd = 0;
 
-		if (raiz.esquerda == null && raiz.direita == null)
-			if (raiz.esquerda.cliente.getSaldoAplicacao() >= saldoMinimo
-					&& raiz.direita.cliente.getSaldoAplicacao() >= saldoMinimo)
-				return 1;
-
-		int totalEsquerda = quantidadeExistente(raiz.esquerda);
-		int totalDireita = quantidadeExistente(raiz.direita);
-		return totalEsquerda + totalDireita;
+		quantidadeExistenteSaldo(raiz.esquerda, saldoMinimo);
+		if (raiz.cliente.getSaldoAplicacao() >= saldoMinimo) {
+			qtd = quantidadeExistente(raiz.direita) + 1;
+			return qtd;
+		}
+		return quantidadeExistenteSaldo(raiz.direita, saldoMinimo);
 	}
 
 	public ArrayList<Cliente> gerarLista(No raiz, double saldoMinimo) {
