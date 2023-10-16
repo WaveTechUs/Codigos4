@@ -15,7 +15,7 @@ import modelo.Cliente;
  * Rafael Ioshi Imamura Pereira 93102/
  */
 
-public class Menu {
+public class DivulgaOfertas {
 
 	public static void main(String[] args) {
 		Scanner le = new Scanner(System.in);
