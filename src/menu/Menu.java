@@ -1,6 +1,7 @@
 package menu;
 
 import java.util.Scanner;
+import java.util.Stack;
 
 import abb.PessaABB.No;
 import abb.PessoaFisica;
@@ -88,11 +89,59 @@ public class Menu {
 				} while (op == -1);
 				System.out.print("Qual o valor de saldo mínimo exigido: R$ ");
 				saldo = le.nextDouble();
-				/*
-				 * Fazendo uso de um método da classe ABB, desenvolvido para este problema, uma
-				 * lista de clientes aptos para a oferta é gerada. Nesse trecho de programa que
-				 * tentar fazer o contato com todos os clientes presente na lista.
-				 */
+				if (op == 1) {
+					Stack<Cliente> clientes = arvorePF.gerarLista(raizPF, saldo);
+
+					while (!clientes.empty()) {
+						Cliente clienteTopo = clientes.pop();
+						System.out.println("Entrar em contato com \n" + clienteTopo);
+						System.out.println("O cliente aceitou a oferta? ");
+						int simNao = 0;
+						do {
+							System.out.print("Digite 1- Sim 2- Não: ");
+							simNao = le.nextInt();
+							switch (simNao) {
+							case 1:
+								System.out.println("Oferta aceita!");
+								raizPF = arvorePF.apagar(raizPF, clienteTopo);
+								break;
+							case 2:
+								System.out.println("Oferta negada.");
+								break;
+							default:
+								System.out.println("Opção inválida ");
+								simNao = -1;
+							}
+						} while (simNao == -1);
+					}
+					System.out.println("Sem clientes para serem contatados.");
+				} else if (op == 2) {
+					Stack<Cliente> clientes = arvorePJ.gerarLista(raizPJ, saldo);
+
+					while (!clientes.empty()) {
+						Cliente clienteTopo = clientes.pop();
+						System.out.println("Entrar em contato com \n" + clienteTopo);
+						System.out.println("O cliente aceitou a oferta? ");
+						int simNao = 0;
+						do {
+							System.out.print("Digite 1- Sim 2- Não: ");
+							simNao = le.nextInt();
+							switch (simNao) {
+							case 1:
+								System.out.println("Oferta aceita!");
+								raizPJ = arvorePJ.apagar(raizPJ, clienteTopo);
+								break;
+							case 2:
+								System.out.println("Oferta negada.");
+								break;
+							default:
+								System.out.println("Opção inválida ");
+								simNao = -1;
+							}
+						} while (simNao == -1);
+					}
+					System.out.println("Sem clientes para serem contatados.");
+				}
 				break;
 			case 3:
 				System.out.print("Qual tipo de conta a oferta se destina? ");
@@ -172,6 +221,8 @@ public class Menu {
 							System.out.println("Existem " + quantidade + " com o saldo de no mínimo " + saldo);
 						}
 						break;
+					case 5:
+						break;
 					default:
 						System.out.println("Opção inválida ");
 						op = -1;
@@ -181,11 +232,11 @@ public class Menu {
 			}
 		} while (opcao != 0);
 		System.out.println("Clientes que não aceitaram ou não estavam adequados para a oferta");
-		/*
-		 * Esvazia as ABBs apresentando todos os clientes que aguardam nova portunidade
-		 */
+		System.out.println("Pessoas Físicas: ");
+		arvorePF.esvaziar(raizPF);
+		System.out.println("Pessoas Jurídicas: ");
+		arvorePJ.esvaziar(raizPJ);
 		le.close();
 
 	}
-
 }

@@ -18,8 +18,13 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente [nomeString=" + nomeString + ", cpfcnpj=" + cpfcnpj + ", numeroConta=" + numeroConta
-				+ ", tipoConta=" + tipoConta + ", saldoAplicacao=" + saldoAplicacao + "]";
+		String toString = "Nome: " + nomeString + "\n" + 
+						  "CPF/CNPJ: " + cpfcnpj + "\n" + 
+						  "Número da Conta: " + numeroConta + "\n" + 
+						  "Tipo da Conta: " + tipoConta + "\n" + 
+						  "Saldo da Aplicação: " + saldoAplicacao + "\n";
+		
+		return toString;
 	}
 
 	public String getNomeString() {

@@ -1,8 +1,7 @@
 package abb;
 
 import java.util.ArrayList;
-
-import javax.swing.plaf.SliderUI;
+import java.util.Stack;
 
 import modelo.Cliente;
 
@@ -142,10 +141,15 @@ public class PessaABB {
 		return raiz;
 	}
 
-	public ArrayList<Cliente> esvaziar(No raiz) {
+	public void esvaziar(No raiz) {
+		if(raiz == null)
+			System.out.println("Sem clientes.");
+
 		ArrayList<Cliente> lista = new ArrayList<Cliente>();
 		esvaziarHelper(raiz, lista);
-		return lista;
+		for(Cliente cliente : lista) {
+			System.out.println(cliente);
+		}
 	}
 
 	private void esvaziarHelper(No raiz, ArrayList<Cliente> lista) {
@@ -222,19 +226,19 @@ public class PessaABB {
 		return quantidadeExistenteSaldo(raiz.direita, saldoMinimo);
 	}
 
-	public ArrayList<Cliente> gerarLista(No raiz, double saldoMinimo) {
-		ArrayList<Cliente> lista = new ArrayList<Cliente>();
+	public Stack<Cliente> gerarLista(No raiz, double saldoMinimo) {
+		Stack<Cliente> lista = new Stack<Cliente>();
 		gerarListaHelper(raiz, saldoMinimo, lista);
 		return lista;
 	}
 
-	private void gerarListaHelper(No raiz, double saldoMinimo, ArrayList<Cliente> lista) {
+	private void gerarListaHelper(No raiz, double saldoMinimo, Stack<Cliente> lista) {
 		if (raiz == null)
 			return;
 
 		gerarListaHelper(raiz.esquerda, saldoMinimo, lista);
 		if (raiz.cliente.getSaldoAplicacao() >= saldoMinimo)
-			lista.add(raiz.cliente);
+			lista.push(raiz.cliente);
 		gerarListaHelper(raiz.direita, saldoMinimo, lista);
 	}
 
